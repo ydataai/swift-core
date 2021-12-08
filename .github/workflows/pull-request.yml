@@ -30,3 +30,6 @@ jobs:
 
     - name: Build for test
       run: make build
+
+    - name: Run tests
+      run: make test
