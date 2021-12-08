@@ -1,3 +1,11 @@
-# YData's open-source-template
+# Swift library with our shared code
 
-New YData Open Source repositories should use this repository as a template.
+## How to install
+
+```swift
+.package(url: "https://github.com/ydataai/swift-core.git", from: "master"),
+```
+
+## About 👯‍♂️
+
+With ❤️ from [YData](https://ydata.ai) [Development team](mailto://developers@ydata.ai)
