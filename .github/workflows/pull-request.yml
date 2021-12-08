@@ -26,7 +26,7 @@ jobs:
 
     - name: Package Resolve
       if: steps.cache.outputs.cache-hit != 'true'
-      run: swift package resolve
+      run: make resolve
 
     - name: Build for test
-      run: swift build
+      run: make build
