@@ -21,8 +21,8 @@ resolve: ### Fetch packages
 update: ### Updates the project dependencies
 	swift package update
 
-build: resolve ### Compiles the code with release flags
-	swift build -c release
-
 build: resolve ### Compiles the code in debug mode
 	swift build
+
+test: resolve
+	swift test
