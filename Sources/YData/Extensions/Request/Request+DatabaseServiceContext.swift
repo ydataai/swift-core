@@ -3,5 +3,5 @@ import Foundation
 import Vapor
 
 extension Request: DatabaseServiceContext {
-  var database: Database { db }
+  public var database: Database { db }
 }
