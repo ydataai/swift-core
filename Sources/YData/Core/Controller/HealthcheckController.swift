@@ -1,6 +1,8 @@
 import Vapor
 
 public struct HealthCheckHTTPController: HTTPController {
+  public init() {}
+
   public func boot(routes: RoutesBuilder) throws {
     routes.get("healthcheck", use: health)
     routes.get("health", use: health)
