@@ -1,6 +1,3 @@
-import Fluent
 import Foundation
 
-public protocol DatabaseServiceContext: ServiceContext {
-  var database: Database { get }
-}
+public protocol DatabaseServiceContext: DatabaseContext, ServiceContext {}
