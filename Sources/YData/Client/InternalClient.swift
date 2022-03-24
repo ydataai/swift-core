@@ -21,7 +21,7 @@ extension InternalClient {
   var scheme: URI.Scheme { URI.Scheme("http") }
   var basePath: String? { nil }
   
-  func send<Request: InternalRequest, R: Response>(_ request: Request) -> EventLoopFuture<R>
+  public func send<Request: InternalRequest, R: Response>(_ request: Request) -> EventLoopFuture<R>
   where Request.Content: Encodable {
     
     var clientRequest = buildClientRequest(for: request)
@@ -37,7 +37,7 @@ extension InternalClient {
       .mapToInternalResponse()
   }
   
-  func send<Request: InternalRequest, R: Response>(_ request: Request) -> EventLoopFuture<R> {
+  public func send<Request: InternalRequest, R: Response>(_ request: Request) -> EventLoopFuture<R> {
     
     let clientRequest = buildClientRequest(for: request)
     

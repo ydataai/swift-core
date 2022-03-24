@@ -13,7 +13,6 @@ extension InternalClient {
   
   public func send<Request: InternalRequest, Resp: InternalModel>(_ request: Request) async throws -> Resp
   where Request.Content: Encodable {
-    
     var clientRequest = buildClientRequest(for: request)
     
     try request.content.flatMap { try clientRequest.content.encode($0, as: .json) }
@@ -22,7 +21,6 @@ extension InternalClient {
   }
   
   public func send<Request: InternalRequest, Resp: InternalModel>(_ request: Request) async throws -> Resp {
-    
     let clientRequest = buildClientRequest(for: request)
     
     return try await httpClient.send(clientRequest).mapToInternalModel()
