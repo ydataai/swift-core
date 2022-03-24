@@ -46,7 +46,7 @@ extension InternalClient {
       .mapToInternalResponse()
   }
   
-  public func buildClientRequest<R: InternalRequest>(for request: R) -> ClientRequest {
+  func buildClientRequest<R: InternalRequest>(for request: R) -> ClientRequest {
     let path = basePath.flatMap { base in request.path.flatMap { "\(base)/\($0)" } ?? base } ?? request.path ?? ""
     
     let query = request.query.flatMap { queries in
