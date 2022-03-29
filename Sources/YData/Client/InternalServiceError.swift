@@ -3,6 +3,6 @@ import Vapor
 
 public extension Internal {
   struct ServiceError: Decodable {
-    let message: String
+    public let message: String
   }
 }
