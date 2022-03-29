@@ -4,7 +4,7 @@ import Vapor
 public protocol InternalClient {
   var scheme: URI.Scheme { get }
   var host: String { get }
-  var port: Int { get }
+  var port: Int? { get }
   var basePath: String? { get }
   
   var httpClient: Vapor.Client { get }
@@ -17,11 +17,11 @@ enum InternalClientError: Error {
   case encode(Error)
 }
 
-extension InternalClient {
+public extension InternalClient {
   var scheme: URI.Scheme { URI.Scheme("http") }
   var basePath: String? { nil }
   
-  public func send<Request: InternalRequest, R: Response>(_ request: Request) -> EventLoopFuture<R>
+  func send<Request: InternalRequest, R: Response>(_ request: Request) -> EventLoopFuture<R>
   where Request.Content: Encodable {
     
     var clientRequest = buildClientRequest(for: request)
@@ -37,7 +37,7 @@ extension InternalClient {
       .mapToInternalResponse()
   }
   
-  public func send<Request: InternalRequest, R: Response>(_ request: Request) -> EventLoopFuture<R> {
+  func send<Request: InternalRequest, R: Response>(_ request: Request) -> EventLoopFuture<R> {
     
     let clientRequest = buildClientRequest(for: request)
     

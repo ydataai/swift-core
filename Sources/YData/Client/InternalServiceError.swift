@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-extension Internal {
+public extension Internal {
   struct ServiceError: Decodable {
     let message: String
   }

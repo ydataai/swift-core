@@ -1,5 +1,3 @@
 import Foundation
 
-public protocol InternalModel: Codable {}
-
-
+public typealias InternalModel = Codable

@@ -10,17 +10,17 @@ public protocol InternalRequest {
   var content: Content? { get }
 }
 
-extension Internal {
+public extension Internal {
   struct NoContentRequest: InternalRequest {
-    typealias Content = Optional<Void>
+    public typealias Content = Optional<Void>
     
-    let method: HTTPMethod
-    let path: String?
-    let headers: HTTPHeaders?
-    let query: [URLQueryItem]?
-    let content: Content? = nil
+    public let method: HTTPMethod
+    public let path: String?
+    public let headers: HTTPHeaders?
+    public let query: [URLQueryItem]?
+    public let content: Content? = nil
     
-    init(method: HTTPMethod,
+    public init(method: HTTPMethod,
          path: String? = nil,
          headers: HTTPHeaders? = nil,
          query: [URLQueryItem]? = nil) {
@@ -32,13 +32,13 @@ extension Internal {
   }
   
   struct ContentRequest<Content: Encodable>: InternalRequest {
-    let method: HTTPMethod
-    let path: String?
-    let headers: HTTPHeaders?
-    let query: [URLQueryItem]?
-    let content: Content?
+    public let method: HTTPMethod
+    public let path: String?
+    public let headers: HTTPHeaders?
+    public let query: [URLQueryItem]?
+    public let content: Content?
     
-    init(method: HTTPMethod,
+    public init(method: HTTPMethod,
          path: String? = nil,
          headers: HTTPHeaders? = nil,
          query: [URLQueryItem]? = nil,

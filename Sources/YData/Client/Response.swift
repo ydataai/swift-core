@@ -10,7 +10,7 @@ public protocol Response: ResponseEncodable {
   init(headers: HTTPHeaders, status: HTTPResponseStatus, body: ByteBuffer?)
 }
 
-extension Response {
+public extension Response {
   func encodeResponse(for request: Request) -> EventLoopFuture<Vapor.Response> {
     let response = Vapor.Response(status: status, headers: headers)
     response.body ?= body.flatMap(Vapor.Response.Body.init)
@@ -18,7 +18,7 @@ extension Response {
   }
 }
 
-extension Response {
+public extension Response {
   @inlinable
   func map<NewValue>(_ callback: (ContentContainer) throws -> (NewValue)) throws -> Self where NewValue: Content {
     let newValue = try callback(content)
@@ -37,7 +37,7 @@ extension Response {
   }
 }
 
-extension EventLoopFuture where Value: Response {
+public extension EventLoopFuture where Value: Response {
   func mapContent<NewValue>(_ callback: @escaping (ContentContainer) throws -> (NewValue))
   -> EventLoopFuture<Value> where NewValue: Content { flatMapThrowing { try $0.map(callback) } }
   

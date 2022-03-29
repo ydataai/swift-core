@@ -1,24 +1,30 @@
 import Vapor
 
-extension Internal {
+public extension Internal {
   struct ErrorResponse: Error {
-    let headers: HTTPHeaders
-    let status: HTTPResponseStatus
-    let message: String
+    public let headers: HTTPHeaders
+    public let status: HTTPResponseStatus
+    public let message: String
   }
   
   struct SuccessResponse: Response {
-    var headers: HTTPHeaders
-    let status: HTTPResponseStatus
-    var body: ByteBuffer?
+    public var headers: HTTPHeaders
+    public let status: HTTPResponseStatus
+    public var body: ByteBuffer?
+    
+    public init(headers: HTTPHeaders, status: HTTPResponseStatus, body: ByteBuffer?) {
+      self.headers = headers
+      self.status = status
+      self.body = body
+    }
   }
 }
 
 extension Internal.ErrorResponse: AbortError {
-  var reason: String { message }
+  public var reason: String { message }
 }
 
-extension Internal.SuccessResponse {
+public extension Internal.SuccessResponse {
   private struct _ContentContainer: ContentContainer {
     var body: ByteBuffer?
     var headers: HTTPHeaders
