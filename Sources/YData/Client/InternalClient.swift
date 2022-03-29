@@ -13,7 +13,7 @@ public protocol InternalClient {
   func send<Req: InternalRequest, Resp: Response>(_ request: Req) -> EventLoopFuture<Resp>
 }
 
-enum InternalClientError: Error {
+public enum InternalClientError: Error {
   case encode(Error)
 }
 
