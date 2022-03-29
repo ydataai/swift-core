@@ -47,3 +47,9 @@ public extension EventLoopFuture where Value: Response {
   func flatMapContentResult<NewValue, E>(_ callback: @escaping (ContentContainer) -> Result<NewValue, E>)
   -> EventLoopFuture<NewValue> where NewValue: Content, E: Error { flatMapResult { callback($0.content) } }
 }
+
+extension Vapor.ClientResponse: Response {
+  public init(headers: HTTPHeaders, status: HTTPResponseStatus, body: ByteBuffer?) {
+    self.init(status: status, headers: headers, body: body)
+  }
+}
