@@ -1,9 +1,7 @@
 import Foundation
 import Vapor
 
-public extension InternalClient {
-  typealias InternalModel = Codable
-  
+public extension InternalClient { 
   func send<Request: InternalRequest, Resp: Response>(_ request: Request) async throws -> Resp
   where Request.Content: Encodable {
     return try await self.send(request).get()
