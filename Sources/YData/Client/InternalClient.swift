@@ -57,7 +57,7 @@ public extension InternalClient {
           return nil
         }
         
-        return String(format: "@%=@%", query.name, escapedValue)
+        return "\(query.name)=\(escapedValue)"
       }.joined(separator: "&")
     }
     
