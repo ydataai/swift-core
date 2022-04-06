@@ -1,3 +1,6 @@
 import Foundation
 
-public typealias Model = Codable
+public extension Http {
+  typealias Model = Codable
+}
+

@@ -1,6 +1,6 @@
 import Vapor
 
-public protocol ClientRequest {
+public protocol HttpRequest {
   associatedtype Content
 
   var method: HTTPMethod { get }
@@ -11,7 +11,7 @@ public protocol ClientRequest {
 }
 
 public extension Http {
-  struct Request<Content: Encodable>: ClientRequest {
+  struct Request<Content: Encodable>: HttpRequest {
     public let method: HTTPMethod
     public let path: String?
     public let headers: HTTPHeaders?

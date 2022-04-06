@@ -10,7 +10,7 @@ public protocol Client {
   var httpClient: Vapor.Client { get }
   var logger: Logger { get }
 
-  func send<Req: ClientRequest, Resp: Response>(_ request: Req) -> EventLoopFuture<Resp>
+  func send<Req: HttpRequest, Resp: Response>(_ request: Req) -> EventLoopFuture<Resp>
 }
 
 public enum ClientError: Error {
@@ -21,7 +21,7 @@ public extension Client {
   var scheme: URI.Scheme { URI.Scheme("http") }
   var basePath: String? { nil }
 
-  func send<Request: ClientRequest, R: Response>(_ request: Request) -> EventLoopFuture<R>
+  func send<Request: HttpRequest, R: Response>(_ request: Request) -> EventLoopFuture<R>
   where Request.Content: Encodable {
 
     var clientRequest = buildClientRequest(for: request)
@@ -37,7 +37,7 @@ public extension Client {
       .mapToInternalResponse()
   }
 
-  func send<Request: ClientRequest, R: Response>(_ request: Request) -> EventLoopFuture<R> {
+  func send<Request: HttpRequest, R: Response>(_ request: Request) -> EventLoopFuture<R> {
 
     let clientRequest = buildClientRequest(for: request)
 
@@ -46,7 +46,7 @@ public extension Client {
       .mapToInternalResponse()
   }
 
-  internal func buildClientRequest<R: ClientRequest>(for request: R) -> ClientRequest {
+  internal func buildClientRequest<R: HttpRequest>(for request: R) -> ClientRequest {
     let path = basePath.flatMap { base in request.path.flatMap { "\(base)/\($0)" } ?? base } ?? request.path ?? ""
 
     let query = request.query.flatMap { queries in
@@ -73,18 +73,18 @@ public extension Client {
 
 private extension EventLoopFuture where Value == ClientResponse {
   func mapToInternalResponse<R>() -> EventLoopFuture<R> where R: Response {
-    return self.flatMapResult { response -> Result<R, Internal.ErrorResponse> in
+    return self.flatMapResult { response -> Result<R, Http.ErrorResponse> in
       switch response.status.code {
       case (100..<400):
         return .success(R(headers: response.headers, status: response.status, body: response.body))
       default:
         do {
-          let contentError = try response.content.decode(Internal.ServiceError.self)
-          return .failure(Internal.ErrorResponse(headers: response.headers,
+          let contentError = try response.content.decode(Http.ServiceError.self)
+          return .failure(Http.ErrorResponse(headers: response.headers,
                                                  status: response.status,
                                                  message:contentError.message))
         } catch {
-          return .failure(Internal.ErrorResponse(headers: [:],
+          return .failure(Http.ErrorResponse(headers: [:],
                                                  status: .internalServerError,
                                                  message: "failed to decode response with error \(error)"))
         }
