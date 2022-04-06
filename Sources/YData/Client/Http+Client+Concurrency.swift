@@ -1,28 +1,28 @@
 import Foundation
 import Vapor
 
-public extension InternalClient { 
-  func send<Request: InternalRequest, Resp: Response>(_ request: Request) async throws -> Resp
+public extension Client {
+  func send<Request: ClientRequest, Resp: Response>(_ request: Request) async throws -> Resp
   where Request.Content: Encodable {
     return try await self.send(request).get()
   }
-  
-  func send<Request: InternalRequest, Resp: Response>(_ request: Request) async throws -> Resp {
+
+  func send<Request: ClientRequest, Resp: Response>(_ request: Request) async throws -> Resp {
     return try await self.send(request).get()
   }
-  
-  func send<Request: InternalRequest, Resp: InternalModel>(_ request: Request) async throws -> Resp
+
+  func send<Request: ClientRequest, Resp: Model>(_ request: Request) async throws -> Resp
   where Request.Content: Encodable {
-    try await (send(request) as EventLoopFuture<ClientResponse>).get().mapToInternalModel()
+    try await (send(request) as EventLoopFuture<ClientResponse>).get().mapToModel()
   }
-  
-  func send<Request: InternalRequest, Resp: InternalModel>(_ request: Request) async throws -> Resp {
-    try await (send(request) as EventLoopFuture<ClientResponse>).get().mapToInternalModel()
+
+  func send<Request: ClientRequest, Resp: Model>(_ request: Request) async throws -> Resp {
+    try await (send(request) as EventLoopFuture<ClientResponse>).get().mapToModel()
   }
 }
 
 private extension ClientResponse  {
-  func mapToInternalModel<R>() async throws -> R where R: InternalModel {
+  func mapToModel<R>() async throws -> R where R: Model {
     switch status.code {
     case (100..<400):
       do {
