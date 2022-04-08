@@ -57,8 +57,8 @@ public extension InternalClient {
   }
 }
 
-private extension EventLoopFuture where Value == ClientResponse {
-  func mapToInternalResponse<R>() -> EventLoopFuture<R> where R: Response {
+private extension EventLoopFuture where Value: InternalResponse {
+  func mapToInternalResponse<R>() -> EventLoopFuture<R> where R: InternalResponse {
     return self.flatMapResult { response -> Result<R, Internal.ErrorResponse> in
       switch response.status.code {
       case (100..<400):
