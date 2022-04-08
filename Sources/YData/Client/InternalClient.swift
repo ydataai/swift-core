@@ -11,6 +11,9 @@ public protocol InternalClient {
   var logger: Logger { get }
   
   func send<Req: InternalRequest, Resp: Response>(_ request: Req) -> EventLoopFuture<Resp>
+  
+  func send<Req: InternalModel, Res: InternalModel>(_ request: Internal.ContentRequest<Req>) async throws -> Res
+  func send<Res: InternalModel>(_ request: Internal.NoContentRequest) async throws -> Res
 }
 
 public enum InternalClientError: Error {
