@@ -10,10 +10,10 @@ extension ResponseEncodable where Self: InternalResponse {
 }
 
 public extension EventLoopFuture where Value: InternalResponse {
-//  func mapContent<NewValue>(_ callback: @escaping (ContentContainer) throws -> (NewValue))
-//  -> EventLoopFuture<Value> where NewValue: Content {
-//    flatMapThrowing { try $0.map(callback) }
-//  }
+  func mapContent<NewValue>(_ callback: @escaping (ContentContainer) throws -> (NewValue))
+  -> EventLoopFuture<Value> where NewValue: Content {
+    flatMapThrowing { try callback($0.content) }
+  }
 
   func mapToContent<R>() -> EventLoopFuture<R> where R: Decodable {
     flatMapThrowing { response -> R in try response.content.decode(R.self) }
