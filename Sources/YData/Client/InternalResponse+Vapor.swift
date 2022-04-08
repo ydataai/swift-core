@@ -11,7 +11,7 @@ extension ResponseEncodable where Self: InternalResponse {
 
 public extension EventLoopFuture where Value: InternalResponse {
   func mapContent<NewValue>(_ callback: @escaping (ContentContainer) throws -> (NewValue))
-  -> EventLoopFuture<Value> where NewValue: Content {
+  -> EventLoopFuture<NewValue> where NewValue: Content {
     flatMapThrowing { try callback($0.content) }
   }
 
