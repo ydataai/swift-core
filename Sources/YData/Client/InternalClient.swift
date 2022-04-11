@@ -1,6 +1,10 @@
 import Foundation
 import Vapor
 
+public extension Internal {
+  enum Client {}
+}
+
 public protocol InternalClient {
   var scheme: URI.Scheme { get }
   var host: String { get }
@@ -9,8 +13,6 @@ public protocol InternalClient {
   
   var httpClient: Vapor.Client { get }
   var logger: Logger { get }
-  
-  func send<Req: InternalRequest, Resp: Response>(_ request: Req) -> EventLoopFuture<Resp>
 }
 
 public enum InternalClientError: Error {
@@ -21,27 +23,10 @@ public extension InternalClient {
   var scheme: URI.Scheme { URI.Scheme("http") }
   var basePath: String? { nil }
   
-  func send<Request: InternalRequest, R: Response>(_ request: Request) -> EventLoopFuture<R>
-  where Request.Content: Encodable {
-    
-    var clientRequest = buildClientRequest(for: request)
-    
-    do {
-      try request.content.flatMap { try clientRequest.content.encode($0, as: .json) }
-    } catch {
-      return httpClient.eventLoop.makeFailedFuture(InternalClientError.encode(error))
-    }
-    
-    return httpClient.send(clientRequest)
-      .always { self.logger.info("response for request \(clientRequest.url): \($0)") }
-      .mapToInternalResponse()
-  }
-  
-  func send<Request: InternalRequest, R: Response>(_ request: Request) -> EventLoopFuture<R> {
-    
+  func send<Request: InternalRequest, Response: InternalResponse>(_ request: Request) -> EventLoopFuture<Response> {
     let clientRequest = buildClientRequest(for: request)
     
-    return httpClient.send(clientRequest)
+    return httpClient.send(buildClientRequest(for: request))
       .always { self.logger.info("response for request \(clientRequest.url): \($0)") }
       .mapToInternalResponse()
   }
@@ -67,12 +52,13 @@ public extension InternalClient {
     request.headers.flatMap { clientRequest.headers = .init($0.map { (key, value) in (key, value) }) }
     clientRequest.method = request.method
     clientRequest.url = url
+    clientRequest.body = request.body
     return clientRequest
   }
 }
 
-private extension EventLoopFuture where Value == ClientResponse {
-  func mapToInternalResponse<R>() -> EventLoopFuture<R> where R: Response {
+private extension EventLoopFuture where Value: InternalResponse {
+  func mapToInternalResponse<R>() -> EventLoopFuture<R> where R: InternalResponse {
     return self.flatMapResult { response -> Result<R, Internal.ErrorResponse> in
       switch response.status.code {
       case (100..<400):
