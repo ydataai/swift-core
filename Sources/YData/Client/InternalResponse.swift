@@ -1,5 +1,15 @@
 import Vapor
 
+public protocol InternalResponse {
+  var headers: HTTPHeaders { get set }
+  var status: HTTPResponseStatus { get }
+  var body: ByteBuffer? { get set }
+
+  var content: ContentContainer { get }
+
+  init(headers: HTTPHeaders, status: HTTPResponseStatus, body: ByteBuffer?)
+}
+
 public extension Internal {
   struct ErrorResponse: Error {
     public let headers: HTTPHeaders
@@ -7,7 +17,7 @@ public extension Internal {
     public let message: String
   }
   
-  struct SuccessResponse: Response {
+  struct SuccessResponse: InternalResponse {
     public var headers: HTTPHeaders
     public let status: HTTPResponseStatus
     public var body: ByteBuffer?
