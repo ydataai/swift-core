@@ -1,5 +1,4 @@
 import Foundation
-import Vapor
 
 public protocol ServiceContext: EventLoopContext, LoggerContext {}
 
