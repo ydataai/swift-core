@@ -84,19 +84,3 @@ extension Internal.SuccessResponse: ResponseEncodable {
     return request.eventLoop.makeSucceededFuture(response)
   }
 }
-
-public extension InternalResponse {
-  @inlinable
-  func map<NewValue>(_ callback: (ContentContainer) throws -> (NewValue)) throws -> Self where NewValue: Content {
-    let newValue = try callback(content)
-
-    return Self.init(headers: headers, status: status, body: newValue as? ByteBuffer)
-  }
-
-  @inlinable
-  func map(_ callback: (ContentContainer) throws -> (Void)) throws -> Self {
-    let _ = try callback(content)
-
-    return Self.init(headers: headers, status: status, body: nil)
-  }
-}
