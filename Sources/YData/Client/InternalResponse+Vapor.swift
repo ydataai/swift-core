@@ -15,6 +15,9 @@ public extension EventLoopFuture where Value: InternalResponse {
     flatMapThrowing { try callback($0.content) }
   }
 
+  func mapContent<NewValue>(_ callback: @escaping (ContentContainer) throws -> (NewValue))
+  -> EventLoopFuture<Value> where NewValue: Content { flatMapThrowing { try $0.map(callback) } }
+
   func mapToContent<R>() -> EventLoopFuture<R> where R: Decodable {
     flatMapThrowing { response -> R in try response.content.decode(R.self) }
   }
@@ -24,6 +27,11 @@ public extension EventLoopFuture where Value: InternalResponse {
 
   func flatMapContentResult<NewValue, E>(_ callback: @escaping (ContentContainer) -> Result<NewValue, E>)
   -> EventLoopFuture<NewValue> where NewValue: Content, E: Error { flatMapResult { callback($0.content) } }
+}
+
+extension EventLoop {
+  public func tryFlatSubmit<NewValue: InternalResponse>(_ callback: @escaping () throws -> EventLoopFuture<NewValue>)
+  -> EventLoopFuture<NewValue> { self.submit(callback).flatMap { $0 } }
 }
 
 extension ClientResponse: InternalResponse {
@@ -66,5 +74,13 @@ public extension ClientResponse  {
                                      message: "failed to decode response with error \(error)")
       }
     }
+  }
+}
+
+extension Internal.SuccessResponse: ResponseEncodable {
+  public func encodeResponse(for request: Request) -> EventLoopFuture<Vapor.Response> {
+    let response = Vapor.Response(status: status, headers: headers)
+    response.body ?= body.flatMap(Vapor.Response.Body.init)
+    return request.eventLoop.makeSucceededFuture(response)
   }
 }
