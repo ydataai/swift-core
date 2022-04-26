@@ -5,7 +5,7 @@ public protocol InternalResponse {
   var status: HTTPResponseStatus { get }
   var body: ByteBuffer? { get set }
 
-  var content: ContentContainer { get }
+  var content: ContentContainer { get set }
 
   init(headers: HTTPHeaders, status: HTTPResponseStatus, body: ByteBuffer?)
 }
@@ -15,7 +15,10 @@ public extension InternalResponse {
   func map<NewValue>(_ callback: (ContentContainer) throws -> (NewValue)) throws -> Self where NewValue: Content {
     let newValue = try callback(content)
 
-    return Self.init(headers: headers, status: status, body: newValue as? ByteBuffer)
+    var newResponse = Self.init(headers: headers, status: status, body: nil)
+    try newResponse.content.encode(newValue)
+
+    return newResponse
   }
 
   @inlinable
