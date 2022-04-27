@@ -54,7 +54,6 @@ public extension ClientResponse  {
   func mapToModel<C>() throws -> C where C: Decodable {
     switch status.code {
     case (100..<400):
-
       do {
         return try content.decode(C.self)
       } catch {
@@ -68,6 +67,11 @@ public extension ClientResponse  {
         throw Internal.ErrorResponse(headers: headers,
                                      status: status,
                                      message:contentError.message)
+      } catch DecodingError.keyNotFound {
+        let contentError = try content.decode(String.self)
+        throw Internal.ErrorResponse(headers: headers,
+                                     status: status,
+                                     message: contentError)
       } catch {
         throw Internal.ErrorResponse(headers: [:],
                                      status: .internalServerError,
