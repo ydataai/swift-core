@@ -70,14 +70,20 @@ private extension EventLoopFuture where Value: InternalResponse {
                                                  status: response.status,
                                                  message:contentError.message))
         } catch DecodingError.keyNotFound {
-          let contentError = try content.decode(String.self)
-          throw Internal.ErrorResponse(headers: headers,
-                                       status: status,
-                                       message: contentError)
+          do {
+            let contentError = try response.content.decode(String.self)
+            return .failure(Internal.ErrorResponse(headers: response.headers,
+                                                   status: response.status,
+                                                   message: contentError))
+          } catch {
+            return .failure(Internal.ErrorResponse(headers: [:],
+                                                   status: .internalServerError,
+                                                   message: "failed to decode response with error \(error)"))
+          }
         } catch {
-          throw Internal.ErrorResponse(headers: [:],
-                                       status: .internalServerError,
-                                       message: "failed to decode response with error \(error)")
+          return .failure(Internal.ErrorResponse(headers: [:],
+                                                 status: .internalServerError,
+                                                 message: "failed to decode response with error \(error)"))
         }
       }
     }
