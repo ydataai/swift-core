@@ -13,7 +13,7 @@ extension Optional {
     }
   }
 
-  func tryMap<E: Error>(_ closure: (() -> E)) throws -> Wrapped {
+  public func tryMap<E: Error>(_ closure: (() -> E)) throws -> Wrapped {
     guard let value = wrapped else {
       throw closure()
     }
