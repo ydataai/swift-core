@@ -12,4 +12,12 @@ extension Optional {
       left = right
     }
   }
+
+  public func tryMap<E: Error>(_ closure: (() -> E)) throws -> Wrapped {
+    guard let value = wrapped else {
+      throw closure()
+    }
+
+    return value
+  }
 }
