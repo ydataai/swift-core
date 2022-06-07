@@ -57,25 +57,29 @@ public extension ClientResponse  {
       do {
         return try content.decode(C.self)
       } catch {
-        throw Internal.ErrorResponse(headers: [:],
-                                     status: .internalServerError,
-                                     message: "failed to decode response \(error)")
+        throw Internal.ErrorResponse(
+          headers: [:],
+          status: .internalServerError,
+          message: "failed to decode response \(error)")
       }
     default:
       do {
         let contentError = try content.decode(Internal.ServiceError.self)
-        throw Internal.ErrorResponse(headers: headers,
-                                     status: status,
-                                     message:contentError.message)
+        throw Internal.ErrorResponse(
+          headers: headers,
+          status: status,
+          message: contentError.message)
       } catch DecodingError.keyNotFound {
         let contentError = try content.decode(String.self)
-        throw Internal.ErrorResponse(headers: headers,
-                                     status: status,
-                                     message: contentError)
+        throw Internal.ErrorResponse(
+          headers: headers,
+          status: status,
+          message: contentError)
       } catch {
-        throw Internal.ErrorResponse(headers: [:],
-                                     status: .internalServerError,
-                                     message: "failed to decode response with error \(error)")
+        throw Internal.ErrorResponse(
+          headers: [:],
+          status: .internalServerError,
+          message: "failed to decode response with error \(error)")
       }
     }
   }
@@ -84,7 +88,7 @@ public extension ClientResponse  {
 extension Internal.SuccessResponse: ResponseEncodable {
   public func encodeResponse(for request: Request) -> EventLoopFuture<Vapor.Response> {
     let response = Vapor.Response(status: status, headers: headers)
-    response.body ?= body.flatMap(Vapor.Response.Body.init)
+    response.body ?= body.flatMap { Vapor.Response.Body(buffer: $0) }
     return request.eventLoop.makeSucceededFuture(response)
   }
 }
