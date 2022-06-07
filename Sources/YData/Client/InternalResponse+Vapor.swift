@@ -4,7 +4,7 @@ import Vapor
 extension ResponseEncodable where Self: InternalResponse {
   func encodeResponse(for request: Request) -> EventLoopFuture<Vapor.Response> {
     let response = Vapor.Response(status: status, headers: headers)
-    response.body ?= body.flatMap(Vapor.Response.Body.init)
+    response.body ?= body.flatMap { Vapor.Response.Body(buffer: $0) }
     return request.eventLoop.makeSucceededFuture(response)
   }
 }
