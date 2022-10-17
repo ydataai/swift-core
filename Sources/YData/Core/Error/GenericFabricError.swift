@@ -1,26 +1,13 @@
 import Foundation
 
-public protocol FabricError: Error {
-  var context: [AnyHashable: Any]? { get }
-  var description: String { get }
-  var httpCode: Int? { get }
-  var name: String { get }
-  var returnValue: Int { get }
-}
-
-extension FabricError {
-  var name: String { "\(Self.self)" }
-}
-
-
-class GenericFabricError: FabricError {
-  var context: [AnyHashable: Any]?
-  var description: String
-  var httpCode: Int?
+public class GenericFabricError: FabricError {
+  public var context: [AnyHashable: Any]?
+  public var description: String
+  public var httpCode: Int?
   var _name: String? // swiftlint:disable:this identifier_name
-  var returnValue: Int
+  public var returnValue: Int
 
-  var name: String {
+  public var name: String {
     get {
       _name ?? "\(Self.self)"
     }
@@ -44,4 +31,3 @@ class GenericFabricError: FabricError {
     self.returnValue = returnValue
   }
 }
-
