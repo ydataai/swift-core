@@ -1,7 +1,7 @@
 import Foundation
 
 public class GenericFabricError: FabricError {
-  public var context: [AnyHashable: Any]?
+  public var context: [String: String]?
   public var description: String
   public var httpCode: Int?
   var _name: String? // swiftlint:disable:this identifier_name
@@ -18,7 +18,7 @@ public class GenericFabricError: FabricError {
   }
 
   init(
-    context: [AnyHashable: Any]? = nil,
+    context: [String: String]? = nil,
     description: String,
     httpCode: Int? = nil,
     name: String? = nil,

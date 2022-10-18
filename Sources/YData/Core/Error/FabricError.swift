@@ -1,7 +1,7 @@
 import Foundation
 
-public protocol FabricError: Error {
-  var context: [AnyHashable: Any]? { get }
+public protocol FabricError: Error, Codable {
+  var context: [String: String]? { get }
   var description: String { get }
   var httpCode: Int? { get }
   var name: String { get }
