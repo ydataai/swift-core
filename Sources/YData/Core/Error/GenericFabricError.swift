@@ -1,10 +1,10 @@
 import Foundation
 
-public class GenericFabricError: FabricError {
+public struct GenericFabricError: FabricError {
   public var context: [String: String]?
   public var description: String
-  public var httpCode: Int?
-  var _name: String? // swiftlint:disable:this identifier_name
+  public var httpCode: Int = 500
+  internal var _name: String? // swiftlint:disable:this identifier_name
   public var returnValue: Int
 
   public var name: String {
@@ -17,16 +17,18 @@ public class GenericFabricError: FabricError {
     }
   }
 
-  init(
+  public init(
     context: [String: String]? = nil,
     description: String,
-    httpCode: Int? = nil,
+    httpCode: Int? = 500,
     name: String? = nil,
     returnValue: Int
   ) {
     self.context = context
     self.description = description
-    self.httpCode = httpCode
+    if let httpCode {
+      self.httpCode = httpCode
+    }
     self._name = name
     self.returnValue = returnValue
   }
