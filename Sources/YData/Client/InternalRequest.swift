@@ -1,3 +1,4 @@
+import Foundation
 import Vapor
 
 public protocol InternalRequest {
@@ -17,7 +18,7 @@ public extension Internal {
     public let query: [URLQueryItem]?
 
     public var body: ByteBuffer?
-    
+
     public init<C: Content>(method: HTTPMethod,
                             path: String? = nil,
                             headers: HTTPHeaders? = nil,

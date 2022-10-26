@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol FabricError: Error, Codable, Equatable {
+public protocol FabricError: Error, Codable {
   var context: [String: String]? { get }
   var description: String { get }
   var httpCode: Int { get }
@@ -10,14 +10,4 @@ public protocol FabricError: Error, Codable, Equatable {
 
 public extension FabricError {
   var name: String { "\(Self.self)" }
-}
-
-public extension FabricError {
-  static func == (lhs: Self, rhs: Self) -> Bool {
-    lhs.context == rhs.context
-    && lhs.description == rhs.description
-    && lhs.httpCode == rhs.httpCode
-    && lhs.name == rhs.name
-    && lhs.returnValue == rhs.returnValue
-  }
 }
