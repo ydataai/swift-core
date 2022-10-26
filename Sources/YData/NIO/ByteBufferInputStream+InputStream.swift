@@ -5,7 +5,7 @@ public final class ByteBufferInputStream: InputStream {
   private var byteBuffer: ByteBuffer
   public override var streamStatus: Stream.Status { .open }
 
-  init(_ byteBuffer: ByteBuffer) {
+  public init(_ byteBuffer: ByteBuffer) {
     self.byteBuffer = byteBuffer
 
     super.init(data: Data())
