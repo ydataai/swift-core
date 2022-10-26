@@ -16,7 +16,7 @@ public struct GenericFabricError: FabricError {
   ) {
     self.context = context
     self.description = description
-    if let httpCode {
+    if let httpCode = httpCode {
       self.httpCode = httpCode
     }
     self.name = name
