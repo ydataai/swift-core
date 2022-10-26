@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-public extension InternalClient { 
+public extension InternalClient {
   func send<Request: InternalRequest, Response: InternalResponse>(_ request: Request) async throws -> Response {
     try await send(request).get()
   }
