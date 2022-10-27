@@ -32,9 +32,52 @@ public extension InternalResponse {
 
 public extension Internal {
   struct ErrorResponse: Error {
-    public let headers: HTTPHeaders
-    public let status: HTTPResponseStatus
-    public let message: String
+    public var headers: HTTPHeaders
+    public var status: HTTPResponseStatus
+    public let content: any FabricError
+
+    init(content: any FabricError, headers: HTTPHeaders, status: HTTPResponseStatus) {
+      self.content = content
+      self.headers = headers
+      self.status = status
+    }
+
+    init(response: any InternalResponse) {
+      self.headers = response.headers
+      var status = response.status
+
+      if let fabricError = try? response.content.decode(GenericFabricError.self) {
+        self.content = fabricError
+      } else if let serviceError = try? response.content.decode(Internal.ServiceError.self) {
+        self.content = GenericFabricError(
+          description: serviceError.message,
+          httpCode: Int(status.code),
+          name: "\(Internal.ServiceError.self)",
+          returnValue: -1
+        )
+      } else {
+        do {
+          let errorMessage = try response.content.decode(String.self)
+
+          self.content = GenericFabricError(
+            description: errorMessage,
+            httpCode: Int(response.status.code),
+            name: "Unknown Error",
+            returnValue: -1
+          )
+        } catch {
+          status = .internalServerError
+          self.content = GenericFabricError(
+            description: "\(error)",
+            httpCode: Int(response.status.code),
+            name: "Unknown Error",
+            returnValue: -1
+          )
+        }
+      }
+
+      self.status = status
+    }
   }
 
   struct SuccessResponse: InternalResponse {
@@ -48,10 +91,6 @@ public extension Internal {
       self.body = body
     }
   }
-}
-
-extension Internal.ErrorResponse: AbortError {
-  public var reason: String { message }
 }
 
 public extension Internal.SuccessResponse {

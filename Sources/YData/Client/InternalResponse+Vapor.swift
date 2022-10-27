@@ -58,29 +58,17 @@ public extension ClientResponse  {
         return try content.decode(C.self)
       } catch {
         throw Internal.ErrorResponse(
+          content: GenericFabricError(
+            description: "\(error)",
+            httpCode: Int(HTTPResponseStatus.internalServerError.code),
+            name: "DecodingError",
+            returnValue: -1),
           headers: [:],
-          status: .internalServerError,
-          message: "failed to decode response \(error)")
+          status: .internalServerError
+        )
       }
     default:
-      do {
-        let contentError = try content.decode(Internal.ServiceError.self)
-        throw Internal.ErrorResponse(
-          headers: headers,
-          status: status,
-          message: contentError.message)
-      } catch DecodingError.keyNotFound {
-        let contentError = try content.decode(String.self)
-        throw Internal.ErrorResponse(
-          headers: headers,
-          status: status,
-          message: contentError)
-      } catch {
-        throw Internal.ErrorResponse(
-          headers: [:],
-          status: .internalServerError,
-          message: "failed to decode response with error \(error)")
-      }
+      throw Internal.ErrorResponse(response: self)
     }
   }
 }
