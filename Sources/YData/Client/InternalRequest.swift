@@ -19,11 +19,13 @@ public extension Internal {
 
     public var body: ByteBuffer?
 
-    public init<C: Content>(method: HTTPMethod,
-                            path: String? = nil,
-                            headers: HTTPHeaders? = nil,
-                            query: [URLQueryItem]? = nil,
-                            content: C) throws {
+    public init<C: Content>(
+      method: HTTPMethod,
+      path: String? = nil,
+      headers: HTTPHeaders? = nil,
+      query: [URLQueryItem]? = nil,
+      content: C
+    ) throws {
       self.method = method
       self.path = path
       self.headers = headers
@@ -31,10 +33,12 @@ public extension Internal {
       try self.content.encode(content)
     }
 
-    public init(method: HTTPMethod,
-                path: String? = nil,
-                headers: HTTPHeaders? = nil,
-                query: [URLQueryItem]? = nil) {
+    public init(
+      method: HTTPMethod,
+      path: String? = nil,
+      headers: HTTPHeaders? = nil,
+      query: [URLQueryItem]? = nil
+    ) {
       self.method = method
       self.path = path
       self.headers = headers
