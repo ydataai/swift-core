@@ -22,4 +22,14 @@ public struct GenericFabricError: FabricError {
     self.name = name
     self.returnValue = returnValue
   }
+
+  public init(_ fabricError: any FabricError) {
+    self = .init(
+      context: fabricError.context,
+      description: fabricError.description,
+      httpCode: fabricError.httpCode,
+      name: fabricError.name,
+      returnValue: fabricError.returnValue
+    )
+  }
 }
