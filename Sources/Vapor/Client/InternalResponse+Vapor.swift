@@ -1,5 +1,6 @@
 import Foundation
 import Vapor
+import YDataCore
 
 extension ResponseEncodable where Self: InternalResponse {
   func encodeResponse(for request: Request) -> EventLoopFuture<Vapor.Response> {

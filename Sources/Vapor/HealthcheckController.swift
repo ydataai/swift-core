@@ -1,6 +1,7 @@
+import Foundation
 import Vapor
 
-public struct HealthCheckHTTPController: HTTPController {
+public struct HealthCheckHTTPController: RouteCollection {
   public init() {}
 
   public func boot(routes: RoutesBuilder) throws {

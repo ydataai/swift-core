@@ -1,5 +1,5 @@
 import Foundation
-import NIO
+import NIOCore
 
 public final class ByteBufferInputStream: InputStream {
   private var byteBuffer: ByteBuffer

@@ -1,5 +1,5 @@
 import Foundation
-import protocol NIO.EventLoop
+import protocol NIOCore.EventLoop
 
 public protocol EventLoopContext {
   var eventLoop: EventLoop { get }

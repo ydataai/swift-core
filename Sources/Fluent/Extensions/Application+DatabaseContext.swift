@@ -2,6 +2,6 @@ import Fluent
 import Foundation
 import Vapor
 
-extension Application: DatabaseClientContext {
+extension Application: DatabaseContext {
   public var database: Database { db }
 }

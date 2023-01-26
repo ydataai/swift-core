@@ -1,5 +1,6 @@
 import Foundation
 import Vapor
+import YDataCore
 
 public protocol InternalResponse {
   var headers: HTTPHeaders { get set }

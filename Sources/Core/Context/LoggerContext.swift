@@ -1,5 +1,5 @@
 import Foundation
-import Vapor
+import Logging
 
 public protocol LoggerContext {
   var logger: Logger { get }

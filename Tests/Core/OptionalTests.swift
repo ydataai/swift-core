@@ -1,8 +1,8 @@
 import XCTest
 
-@testable import YData
+@testable import YDataCore
 
-final class temp_swift_packageTests: XCTestCase {
+final class optional_tests: XCTestCase {
   func testSuccessful() throws {
     var left = "left"
 

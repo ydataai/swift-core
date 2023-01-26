@@ -1,9 +1,9 @@
 import Foundation
+import YDataCore
+import YDataNIO
 
 public protocol ClientContext: EventLoopContext, LoggerContext {}
 
 public protocol Client {
-  associatedtype Context: ClientContext
-
-  var context: Context { get }
+  var context: any ClientContext { get }
 }
