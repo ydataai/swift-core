@@ -80,5 +80,3 @@ extension Internal.SuccessResponse: ResponseEncodable {
     return request.eventLoop.makeSucceededFuture(response)
   }
 }
-
-extension ClientResponse: SafeStringConvertible {}

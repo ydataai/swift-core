@@ -28,7 +28,7 @@ public extension InternalClient {
     let clientRequest = buildClientRequest(for: request)
 
     return httpClient.send(clientRequest)
-      .always { self.logger.info("response for request \(clientRequest.url): \($0.safeDescription)") }
+      .always { self.logger.info("wtf \(clientRequest.url): \($0.safeDescription)") }
       .mapToInternalResponse()
   }
 
@@ -70,6 +70,8 @@ private extension EventLoopFuture where Value: InternalResponse {
     }
   }
 }
+
+extension ClientResponse: SafeStringConvertible {}
 
 extension Result: SafeStringConvertible {
   public var safeDescription: String {
