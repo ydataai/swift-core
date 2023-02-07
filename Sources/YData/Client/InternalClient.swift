@@ -23,11 +23,12 @@ public extension InternalClient {
   var scheme: URI.Scheme { URI.Scheme("http") }
   var basePath: String? { nil }
 
-  func send<Request: InternalRequest, Response: InternalResponse>(_ request: Request) -> EventLoopFuture<Response> {
+  func send<Request, Response>(_ request: Request) -> EventLoopFuture<Response>
+  where Request: InternalRequest, Response: InternalResponse {
     let clientRequest = buildClientRequest(for: request)
 
-    return httpClient.send(buildClientRequest(for: request))
-      .always { self.logger.info("response for request \(clientRequest.url): \($0)") }
+    return httpClient.send(clientRequest)
+      .always { self.logger.info("response for request \(clientRequest.url): \($0.safeDescription)") }
       .mapToInternalResponse()
   }
 
@@ -66,6 +67,21 @@ private extension EventLoopFuture where Value: InternalResponse {
       default:
         return .failure(Internal.ErrorResponse(response: response))
       }
+    }
+  }
+}
+
+extension Result: SafeStringConvertible {
+  public var safeDescription: String {
+    switch self {
+    case .failure(let error):
+      return "\(error)"
+    case .success(let value):
+      if let value = value as? SafeStringConvertible {
+        return value.safeDescription
+      }
+
+      return "\(value)"
     }
   }
 }
