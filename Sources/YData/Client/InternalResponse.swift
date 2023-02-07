@@ -126,8 +126,12 @@ public extension Internal.SuccessResponse {
   }
 }
 
-public extension CustomStringConvertible where Self: InternalResponse {
-  var description: String {
+public protocol SafeStringConvertible {
+  var safeDescription: String { get }
+}
+
+public extension SafeStringConvertible where Self: InternalResponse {
+  var safeDescription: String {
     var desc = ["HTTP/1.1 \(status.code) \(status.reasonPhrase)"]
     desc += self.headers.map { "\($0.name): \($0.value)" }
     return desc.joined(separator: "\n")
