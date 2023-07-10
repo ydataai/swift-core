@@ -28,6 +28,11 @@ public extension InternalResponse {
 
     return Self.init(headers: headers, status: status, body: nil)
   }
+
+  @inlinable
+  func mapToContent<D: Decodable>(_ type: D.Type = D.self) throws -> D {
+    try content.decode(type)
+  }
 }
 
 public extension Internal {
