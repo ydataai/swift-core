@@ -24,7 +24,7 @@ jobs:
       with:
         swift-version: "5.6"
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       id: cache
       with:
         path: .build
