@@ -1,3 +1,3 @@
 import Foundation
 
-public protocol Context {}
+public protocol Context: Sendable {}
