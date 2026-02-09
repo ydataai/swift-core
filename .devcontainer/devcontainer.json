@@ -1,6 +1,6 @@
 {
   "name": "Swift 5.6",
-  "image": "swift:5.6-focal",
+  "image": "swift:6.1-focal",
   "extensions": [
     "sswg.swift-lang"
   ],
