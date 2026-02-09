@@ -5,7 +5,7 @@ public extension Internal {
   enum Client {}
 }
 
-public protocol InternalClient {
+public protocol InternalClient: Sendable {
   var scheme: URI.Scheme { get }
   var host: String { get }
   var port: Int? { get }

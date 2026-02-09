@@ -1,6 +1,6 @@
 import Fluent
 import Foundation
 
-public protocol DatabaseContext {
+public protocol DatabaseContext: Sendable {
   var database: Database { get }
 }

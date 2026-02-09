@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol EnumModel {
+public protocol EnumModel: Sendable {
   static var schema: String { get }
 }
 

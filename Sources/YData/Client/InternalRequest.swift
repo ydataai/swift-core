@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-public protocol InternalRequest {
+public protocol InternalRequest: Sendable {
   var method: HTTPMethod { get }
   var path: String? { get }
   var headers: HTTPHeaders? { get }

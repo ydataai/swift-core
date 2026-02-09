@@ -1,8 +1,8 @@
 import Foundation
 
-public protocol ConfigurationError: Error {}
+public protocol ConfigurationError: Sendable, Error {}
 
-public protocol Configuration {
+public protocol Configuration: Sendable {
   associatedtype Error: ConfigurationError
 
   static func loadFromEnvironment() -> Result<Self, Error>

@@ -1,3 +1,3 @@
 import Foundation
 
-public protocol InternalModel: Codable {}
+public protocol InternalModel: Codable, Sendable {}

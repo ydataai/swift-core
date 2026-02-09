@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-public protocol InternalResponse {
+public protocol InternalResponse: Sendable {
   var headers: HTTPHeaders { get set }
   var status: HTTPResponseStatus { get }
   var body: ByteBuffer? { get set }
