@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-http2.git",
       "state" : {
-        "revision" : "0904bf0feb5122b7e5c3f15db7df0eabe623dd87",
-        "version" : "1.30.0"
+        "revision" : "c2ba4cfbb83f307c66f5a6df6bb43e3c88dfbf80",
+        "version" : "1.39.0"
       }
     },
     {
