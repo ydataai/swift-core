@@ -25,7 +25,7 @@ public final class ByteBufferInputStream: InputStream {
     // Convert into a C pointer and assign it to the provided mutable pointer
     let writtenBytes = bytes.withUnsafeBufferPointer { arrayPointer -> Int in
       arrayPointer.baseAddress.flatMap { pointer -> Int in
-        buffer.assign(from: pointer, count: length)
+        buffer.update(from: pointer, count: length)
         return length
       } ?? 0
     }

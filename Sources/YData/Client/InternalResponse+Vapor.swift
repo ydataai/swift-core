@@ -18,7 +18,7 @@ public extension EventLoopFuture where Value: InternalResponse {
   func mapContent<NewValue>(_ callback: @escaping (ContentContainer) throws -> (NewValue))
   -> EventLoopFuture<Value> where NewValue: Content { flatMapThrowing { try $0.map(callback) } }
 
-  func mapToContent<D: Decodable>(_ type: D.Type = D.self) -> EventLoopFuture<D> {
+  func mapToContent<D: Decodable & Sendable>(_ type: D.Type = D.self) -> EventLoopFuture<D> {
     flatMapThrowing { response -> D in try response.content.decode(type) }
   }
 
