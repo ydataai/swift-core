@@ -14,7 +14,7 @@ let package = Package(
   ],
   dependencies: [
     // Dependencies declare other packages that this package depends on.
-    .package(url: "https://github.com/vapor/vapor.git", from: "4.121.1"),
+    .package(url: "https://github.com/vapor/vapor.git", from: "4.121.2"),
     .package(url: "https://github.com/vapor/fluent.git", from: "4.13.0")
   ],
   targets: [
